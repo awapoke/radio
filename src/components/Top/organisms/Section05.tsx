@@ -1,10 +1,10 @@
 import React from 'react'
 import { css, keyframes } from '@emotion/core'
-// import { flight } from "../../../styles/shared"
+import { Instagram } from "../molecules/Instagram"
 
 export const Section05 =  () => {
     return(
-        <section css={styled.section} className="section-sns-common">
+        <section css={styled.section} className="section-sns-common" id="sns">
             <div css={instagramfield.block} id="instagram_field" className="instagram_block">
                 <div css={instagramfield.title} className="instagram_field_title">
                     <p css={instagramfield.titletext}>
@@ -13,15 +13,19 @@ export const Section05 =  () => {
                     </p>
                 </div>
                 <div css={instagramfield.viewblock} className="insta_view_block">
-                    <div css={instagramfield.mainbox} className="main_box"></div>
+                    <div css={instagramfield.mainbox} className="main_box" id="main_box">
+                        {Instagram()}
+                    </div>
                 </div>
             </div>
             <div css={tips.block} className="tips">
                 <div css={tips.facebook} className="facebook-feed">
                     <div>
-                        <p css={tips.feedtext}>FaceBook</p>
+                        <p css={tips.feedtext}>Facebook</p>
                     </div>
-                    <div css={tips.facebookfeed}></div>
+                    <div css={tips.facebookfeed}>
+                        <iframe src="https://www.facebook.com/plugins/page.php?href=https%3A%2F%2Fwww.facebook.com%2Fawapocke%2F&tabs=timeline&width=340&height=500&small_header=false&adapt_container_width=true&hide_cover=false&show_facepile=false&appId=731219860982553" width="340" height="500" css={facebookstyle} scrolling="no" allow="encrypted-media"></iframe>
+                    </div>
                 </div>
                 <div css={tips.support} className="support-title">
                     <div>
@@ -62,9 +66,15 @@ const blockkeyframe =keyframes`
     100% {opacity: 1}
 `
 
+const facebookstyle = css`
+    border:none;
+    overflow:hidden;
+`
+
 const styled = {
     section: css`
         display: block;
+        margin: 50px 0;
     `,
 }
 
@@ -72,6 +82,10 @@ const instagramfield = {
     block: css`
         height: 400px;
         transition: all 1.5s ease-in-out;
+        @media screen and (max-width: 480px) {
+            padding: 100px 0;
+            padding-top: 0;
+        }
     `,
     title: css`
         padding: 30px;
@@ -86,9 +100,11 @@ const instagramfield = {
     titlelink: css`
         z-index: 50;
         transition: all 1s ease;
+        font-weight: 800;
     `,
     titlespan: css`
         color: #666666;
+        margin-left: 5px;
     `,
     viewblock: css`
         display: block;
@@ -103,6 +119,7 @@ const instagramfield = {
         display: flex;
         align-items: center;
         justify-content: center;
+        flex-wrap: wrap;
     `
 }
 
@@ -116,6 +133,19 @@ const tips = {
         margin-top: 100px;
         margin-bottom: 50px;
         z-index: 50;
+        @media (max-width: 480px) {
+            display: block;
+            text-align: center;
+            width: 91%;
+        }
+        @media screen and (max-width: 1000px) and (min-width: 897px) {
+            display: block;
+            text-align: center;
+        }
+        @media screen and (max-width: 896px) and (min-width: 481px) {
+            display: block;
+            text-align: center;
+        }
     `,
     facebook: css`
         z-index: 50;
@@ -125,11 +155,26 @@ const tips = {
         font-weight: bold;
     `,
     facebookfeed: css`
-        height: 500px;
-        width : 500px;
+        max-height: 500px;
+        max-width : 500px;
+        @media screen and (max-width: 1000px) and (min-width: 897px) {
+            margin: auto;
+        }
+        @media screen and (max-width: 896px) and (min-width: 481px) {
+            margin: auto;
+        }
     `,
     support: css`
         z-index: 50;
+        @media (max-width: 480px) {
+            margin-top: 80px;
+        }
+        @media screen and (max-width: 1000px) and (min-width: 897px) {
+            margin-top: 80px;
+        }
+        @media screen and (max-width: 896px) and (min-width: 481px) {
+            margin-top: 80px;
+        }
     `,
     title: css`
         font-size: 25px;
@@ -160,11 +205,25 @@ const tips = {
         font-weight: 800;
         padding: 0;
         line-height: 2.5rem;
+        @media screen and (max-width: 480px) {
+            font-size: 14px;
+        }
+        @media screen and (max-width: 896px) and (min-width: 481px) {
+            font-size: 16px;
+        }
     `,
     backbg: css`
         background: url("https://res.cloudinary.com/hchyaihwv/image/upload/e_art:peacock,q_100/v1572851882/IMG_0033.jpg");
         background-repeat: no-repeat;
         background-size: 100% 100%;
         border-radius: 5px;
+        @media screen and (max-width: 1000px) and (min-width: 897px) {
+            width: 300px;
+            margin: auto;
+        }
+        @media screen and (max-width: 896px) and (min-width: 481px) {
+            width: 300px;
+            margin: auto;
+        }
     `
 }

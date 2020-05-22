@@ -1,24 +1,14 @@
-/**
- * Layout component that queries for data
- * with Gatsby's useStaticQuery component
- *
- * See: https://www.gatsbyjs.org/docs/use-static-query/
- */
 
 import React from "react"
 import { Helmet } from 'react-helmet'
 import { useStaticQuery, graphql } from "gatsby"
-// import { IndexQuery_ } from '../../../types/graphql-types'
 import { css } from '@emotion/core'
 import { Header } from "../organisms/Header"
 import "../../../styles/layout.css"
-// import { Image } from "../image"
 import 'bootstrap/dist/css/bootstrap.min.css'
-// import Author from "./author"
-import { CursoPoint } from "../atoms/Cursor"
+import { CursorPoint } from "../atoms/Cursor"
 import { Footer } from "../organisms/Footer"
 import { social, flight } from "../../../styles/Shared"
-// import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 
 const style = {
   wrapper: css`
@@ -30,6 +20,7 @@ const style = {
   container: css`
     padding: 0;
     background: rgb(255,255,255,.9);
+    position: relative;
   `
 }
 interface Layoutprops {
@@ -37,9 +28,8 @@ interface Layoutprops {
 }
 
 export const Layout = ({ children }: Layoutprops) => {
-  console.log(children)
   const data = useStaticQuery(graphql`
-    query IndexDivQueryItem {
+    query {
       site {
         siteMetadata {
           title
@@ -48,12 +38,10 @@ export const Layout = ({ children }: Layoutprops) => {
       }
     }
   `)
-  console.log("data")
-  console.log(data)
   return (
     <div className="contentBlock">
       <div className="backImage"></div>
-      <CursoPoint />
+      <CursorPoint />
       <div css={style.container} className="container">
         <Helmet
           titleTemplate={`%s - ${data.site.siteMetadata.title}`}
@@ -68,7 +56,9 @@ export const Layout = ({ children }: Layoutprops) => {
               content: 'gatsby, gatsbyjs, sample, demo, typescript',
             },
           ]}
-        />
+        >
+           <script src="../../../styles/Cursor.js" type="text/javascript" />
+        </Helmet>
         <Header title={data.site.siteMetadata.title} />
         <div css={style.wrapper}>
           {children}

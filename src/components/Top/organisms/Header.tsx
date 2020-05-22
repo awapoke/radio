@@ -1,12 +1,9 @@
 
 import React from 'react'
-import styled from '@emotion/styled'
-import { Link, useStaticQuery, graphql } from 'gatsby'
-// import { LunrSearch } from '../molecules/lunrsearch'
+import { useStaticQuery, graphql } from 'gatsby'
 import { navbar, naviItem, headeritem} from "../../../styles/Header"
 import Img from "gatsby-image"
 import { css } from '@emotion/core'
-// import { LunrSearch } from "../molecules/lunrsearch"
 
 interface HeaderProps {
   readonly title: string
@@ -25,41 +22,35 @@ export const Header : React.FC<HeaderProps> = ({ title }: HeaderProps) => {
     }
   `)
 
-  console.log(data)
   return (
     <nav css={navbar} className="navbar navbar-expand-lg navbar-light">
-      <TitleLink to="/" className="navbar-brand" css={headerLogo}>
+      <a href="/" className="navbar-brand" css={TitleLink}>
         <Img fixed={data.LogoImage.childImageSharp.fixed} />
-      </TitleLink>
+      </a>
       <div css={naviItem.menuicon} className="cursor-react menu-icon">
-        <button css={naviItem.naviBt} className="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
-          <span className="navbar-torigger-icon" css={naviItem.navitorigger01}></span>
-          <span className="navbar-torigger-icon" css={naviItem.navitorigger02}></span>
-          <span className="navbar-torigger-icon" css={naviItem.navitorigger03}></span>
+        <button css={naviItem.naviBt} id="hamburger" className="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+          <span className="navbar-torigger-icon first" css={naviItem.navitorigger01}></span>
+          <span className="navbar-torigger-icon middle" css={naviItem.navitorigger02}></span>
+          <span className="navbar-torigger-icon last" css={naviItem.navitorigger03}></span>
         </button>
       </div>
 
       <div css={headeritem.div} className="collapse navbar-collapse" id="navbarSupportedContent">
-        <ul className="navbar-nav mr-auto">
-          <li css={headeritem.li} className="nav-item active">
-            <a css={headeritem.a} className="nav-link" href="#">Home<span className="sr-only">(current)</span></a>
+        <ul css={styled.ul} className="navbar-nav mr-auto">
+          <li css={headeritem.li} className="nav-item">
+            <a css={headeritem.a} className="nav-link active" href="/">TOP</a>
           </li>
           <li css={headeritem.li} className="nav-item">
-            <a css={headeritem.a} className="nav-link" href="#">Gallery</a>
-          </li>
-          <li css={headeritem.li} className="nav-item dropdown">
-            <a css={headeritem.a} className="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-              Dropdown
-            </a>
-            <div className="dropdown-menu" aria-labelledby="navbarDropdown">
-              <a className="dropdown-item" href="#">Action</a>
-              <a className="dropdown-item" href="#">Another action</a>
-              <div className="dropdown-divider"></div>
-              <a className="dropdown-item" href="#">Something else here</a>
-            </div>
+            <a css={headeritem.a} className="nav-link" href="/about">AWAPOKE</a>
           </li>
           <li css={headeritem.li} className="nav-item">
-            <a css={headeritem.a} className="nav-link disabled" href="#">Disabled</a>
+            <a css={headeritem.a} className="nav-link" href="/posts">RADIO</a>
+          </li>
+          <li css={headeritem.li} className="nav-item">
+            <a css={headeritem.a} className="nav-link" href="/info">INFORMATION</a>
+          </li>
+          <li css={headeritem.li} className="nav-item">
+            <a css={headeritem.a} className="nav-link" href="/contact">CONTACT</a>
           </li>
         </ul>
       </div>
@@ -67,14 +58,65 @@ export const Header : React.FC<HeaderProps> = ({ title }: HeaderProps) => {
   )
 }
 
-const TitleLink = styled(Link)`
+const TitleLink = css`
   color: #222;
+  top: 50px;
+  position: fixed;
+  z-index: 80;
+  @media screen and (max-width: 480px) {
+    display: none;
+  }
+  @media screen and (max-width: 992px) and (min-width: 897px) {
+    position: fixed!important;
+    z-index: 80!important;
+  }
+  @media screen and (max-width: 896px) and (min-width: 481px) {
+    top: 20px;
+  }
   &:active,
   &:hover {
     color: #fff;
   }
-`
-const headerLogo = css`
-  position: fixed;
-  z-index: 10;
-`
+
+`;
+
+const styled = {
+  ul: css`
+    @media screen and (max-width: 480px) {
+      transition: .5s;
+      top: 0!important;
+      background: rgb(0,0,0,.8);
+      width: 200px!important;
+      left: 0;
+      padding: 50px 0;
+      border-radius: 5px;
+      transform: translate(-250px,-250px);
+      position: fixed!important;
+    }
+    @media screen and (min-width: 993px){
+      top: 55px!important;
+    }
+    @media screen and (max-width: 992px) and (min-width: 897px) {
+      transition: .5s;
+      top: 0!important;
+      background: rgb(0,0,0,.8);
+      width: 200px!important;
+      left: 0;
+      padding: 50px 0;
+      border-radius: 5px;
+      transform: translate(-250px,-250px);
+      position: fixed!important;
+    }
+    @media screen and (max-width: 896px) and (min-width: 481px) {
+      transition: .5s;
+      top: 0!important;
+      background: rgb(0,0,0,.8);
+      width: 200px!important;
+      left: 0;
+      padding: 50px 0;
+      border-radius: 5px;
+      transform: translate(-250px,-250px);
+      position: fixed!important;
+    }
+  `,
+}

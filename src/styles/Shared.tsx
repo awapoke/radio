@@ -14,7 +14,7 @@ export const inner = css`
 export const innertop = css`
   height: 100vh!important;
   min-height: 500px;
-`
+`;
 
 export const bghead = css`
   position: absolute;
@@ -26,7 +26,7 @@ export const bghead = css`
   background-size: cover;
   background-position: center center;
   background-repeat: no-repeat;
-`
+`;
 
 export const linner = {
   linner01: css`
@@ -42,8 +42,14 @@ export const linner = {
     flex-direction: column;
   `,
   linnerimg: css`
-    width : 400px;
-  `
+    width : 500px;
+    @media screen and (max-width: 480px) {
+      width: auto;
+    }
+    @media screen and (max-width: 896px) and (min-width: 481px){
+      width: 350px;
+    }
+  `,
 }
 
 export const playbt = {
@@ -61,13 +67,13 @@ export const playbt = {
     height: 53px;
     margin-right: 16px;
     padding-top: 0;
-    border: 1px solid rgb(32,166,242,.8);
+    border: 1px solid #e6e6e6;
     border-radius: 50%;
     text-align: center;
     transition: border .2s ease-out, background .2s ease-out;
   `,
   text: css`
-    color : rgb(32,166,242,.8);
+    color : #e6e6e6;
     font-size: 20px;
     position: relative;
   `,
@@ -80,7 +86,7 @@ export const playbt = {
     left: 0;
     bottom: 0;
     margin: auto!important;
-  `
+  `,
 }
 
 export const scrolldown = css`
@@ -94,7 +100,12 @@ export const scrolldown = css`
   transform: rotate(90deg);
   transform-origin: center center;
   margin-bottom: 77px;
-`
+  @media screen and (max-width: 480px) {
+    display: none!important;
+    position: fixed;
+    top: 550px;
+  }
+`;
 
 export const social = {
   shareicon :css`
@@ -113,7 +124,7 @@ export const social = {
   z-index: 4;
   bottom: 40px;
   left: 40px;
-  `
+  `,
 }
 
 export const bg_img = css`
@@ -127,23 +138,26 @@ export const bg_img = css`
   right: 0%;
   bottom: 0%;
   transform: translate(-50%, -50%);
-`
+`;
 
 export const sectionlinkhome =  css`
-  width: 45%;
+  width: 50%;
   position: relative;
   overflow: hidden;
-`
+  @media screen and (max-width: 650px) {
+    width: 100%;
+  }
+`;
 
 export const headline = css`
   font-size: 41px;
   letter-spacing: 0.05em;
-`
+`;
 
 export const flight = css`
   font-weight: 800;
-`
+`;
 
 export const showsml = css`
   display: none;
-`
+`;

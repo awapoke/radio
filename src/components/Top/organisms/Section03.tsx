@@ -1,36 +1,69 @@
-import React from 'react'
+import React, { useState } from 'react'
 import { css } from '@emotion/core'
 import { Information } from '../molecules/Information'
-// import { useStaticQuery, graphql } from 'gatsby'
-// // import { LunrSearch } from '../molecules/lunrsearch'
-import { flight } from "../../../styles/shared"
+import { useStaticQuery, graphql } from 'gatsby'
+import { flight } from "../../../styles/Shared"
 
 export const Section03 =  () => {
+    const [typeValue, setValue] = useState("")
+    const data = useStaticQuery(graphql`
+        query {
+            allContentfulInformation {
+                edges {
+                    node {
+                        id
+                        createdAt(formatString: "YYYY.MM.DD")
+                        postExcerpt
+                        type
+                    }
+                }
+            }
+        }
+    `)
+
+    const item = data.allContentfulInformation.edges;
+    const query = item.map((d, index) => {
+        return d.node;
+    })
+
+    const handleClick = (e) => {
+        e.preventDefault();
+        const dataItem = query.filter((n) => {
+            return n.type === e.target.textContent;
+        })
+        return setValue(dataItem);
+    }
+
+    const typeList = item.map((y, key) => {
+        const itemTypeList = y.node.type;
+        return itemTypeList;
+    })
 
     return (
-        <section css={SectionContent.main} className="section-information-home">
-            <div className="l-inner">
+        <section css={SectionContent.main} className="section-information-home" id="information">
+            <div css={SectionContent.linner} className="l-inner">
                 <div css={SectionContent.haedline} className="box-headline">
                     <h3 css={[ SectionContent.headlinelight, flight ]} className="headline f-light">INFORMATION</h3>
-                    <p css={flight} className="icon-link f-light">
-                        <a href="#" css={SectionContent.iconlink} className="cursor-react cursor-react-btn">+</a>
-                    </p>
                 </div>
                 <div css={SectionContent.clearfix} className="l-container clearfix">
                     <div css={SectionContent.clearfixleft} className="l-left">
                         <ul css={SectionContent.navinformation} className="nav-information nav-btnlist">
                             <li css={SectionContent.navinformationli}>
-                                <a href="#" css={SectionContent.iconlinkbtn} className="cursor-react cursor-react-btn">All</a>
+                                <a href="/info" css={SectionContent.iconlinkbtn} className="cursor-react cursor-react-btn">All</a>
                             </li>
-                            <li css={SectionContent.navinformationli}>
-                                <a href="#" css={SectionContent.iconlinkbtn} className="cursor-react cursor-react-btn">News</a>
-                            </li>
-                            <li css={SectionContent.navinformationli}>
-                                <a href="#" css={SectionContent.iconlinkbtn} className="cursor-react cursor-react-btn">Radio</a>
-                            </li>
+                            { typeList.find((d) => d === "News") && (
+                                <li css={SectionContent.navinformationli}>
+                                    <a href="#" onClick={(e) => handleClick(e)} css={SectionContent.iconlinkbtn} className="cursor-react cursor-react-btn infoLinkitem">News</a>
+                                </li>
+                            )}
+                            { typeList.find((d) => d === "Radio") && (
+                                <li css={SectionContent.navinformationli}>
+                                    <a href="#" onClick={(e) => handleClick(e)} css={SectionContent.iconlinkbtn} className="cursor-react cursor-react-btn infoLinkitem">Radio</a>
+                                </li>
+                            )}
                         </ul>
                     </div>
-                    <Information />
+                    <Information children={typeValue} />
                 </div>
             </div>
         </section>
@@ -39,9 +72,13 @@ export const Section03 =  () => {
 
 const SectionContent = {
     main : css`
-        @media (max-width: 800px) {
-            padding-top : 50px;
-            padding-bottom: 60px;
+        @media screen and (max-width: 896px) and (min-width: 481px) {
+            padding: 80px 0;
+            padding-top: 30px;
+        }
+        @media screen and (max-width: 480px) {
+            padding-top: 30px;
+            padding-bottom: 80px;
         }
         padding-top: 90px;
         padding-bottom: 141px;
@@ -53,13 +90,17 @@ const SectionContent = {
             justify-content: space-between;
             align-items: center;
         }
-        @media (max-width: 800px) {
+        @media screen and (max-width: 896px) and (min-width: 481px) {
             margin-bottom: 26px;
+            padding-left: 30px;
             display: flex;
             justify-content: space-between;
             align-items: center;
         }
-        margin-bottom: 36px;
+        @media screen and (max-width: 480px){
+            padding-left: 30px;
+        }
+        margin-bottom: 50px;
     `,
     headlinelight: css`
         margin-top: 13px;
@@ -95,6 +136,9 @@ const SectionContent = {
         text-align: center;
         padding: 0 18px;
         transition: background .3s ease-out, border .3s ease-out
+        @media (max-width: 480px) {
+            padding: 2px 18px;
+        }
     `,
     clearfix: css`
         @media screen and (min-width: 1101px) {
@@ -104,11 +148,19 @@ const SectionContent = {
         min-height: 1%;
     `,
     clearfixleft: css`
-        @media screen and (max-width: 800px) {
+        @media screen and (max-width: 480px) {
+            padding-left: 30px;
             float: none;
             max-width: 100%;
             width: 100%;
             margin-bottom: 35px;
+        }
+        @media screen and (max-width: 896px) and (min-width: 481px) {
+            float: none;
+            max-width: 100%;
+            width: 100%;
+            margin-bottom: 35px;
+            padding-left: 30px;
         }
         @media screen and (max-width: 1100px) and (min-width: 801px){
             float: none;
@@ -151,5 +203,14 @@ const SectionContent = {
             margin-bottom: 27px;
         }
     ` ,
-
+    linner: css`
+        padding-right: 0px!important;
+        @media screen and (max-width: 480px) {
+            padding: 0px!important;
+        }
+        @media screen and (max-width: 896px) and (min-width: 481px){
+            padding: 0px!important;
+            margin: 0!important;
+        }
+    `,
 };

@@ -1,61 +1,90 @@
-import React from 'react'
+import React, {useEffect, useState} from 'react'
 import { css } from '@emotion/core'
-import { sectionlinkhome, flight, showsml, headline } from "../../../styles/Shared"
+import { sectionlinkhome } from "../../../styles/Shared"
+import { useStaticQuery, graphql } from 'gatsby'
 
 export const Gallery = () => {
+    const [protocols, setProtocol] = useState("")
+    const [hostnames, setHostname] = useState("")
+    useEffect(() => {
+        setProtocol(location.protocol)
+        setHostname(location.hostname)
+    }, [])
+
+    const link = (d) => {
+        var protocol = protocols;
+        var host = hostnames;
+        if(host === "localhost"){
+            host = "localhost:8000";
+        }
+        return `${protocol}//${host}/posts/${d}`;
+    }
+
+    const data = useStaticQuery(graphql`
+        query {
+            allContentfulPosts(sort: { fields: [title], order: DESC }) {
+                edges {
+                    node {
+                        id
+                        title
+                        postExcerpt
+                        createdAt(formatString: "YYYY/MM/DD")
+                        thumbnail {
+                            fixed(width: 720, height: 400) {
+                                src
+                            }
+                        }
+                    }
+                }
+            }
+        }
+    `)
+    const item01 = data.allContentfulPosts.edges.slice( 0, 2 );
+    const item02 = data.allContentfulPosts.edges.slice( 2, 4 );
+
     return (
         <>
-            <div css={styled.linkhome}>
-                <div css={[styled.contenthome , sectionlinkhome]} className="section-contents-home section-link-home item-fadein is-visible is-animate-done">
-                    <div className="box-headline">
-                        <h3 css={[flight, headline, styled.headlineh3]} className="headline f-light">Title</h3>
-                        <p css={styled.headlinetext}>SubTitle</p>
-                        <p css={[showsml ,flight]} className="icon-link f-light show-sml">
-                            <a href="#" css={styled.showsmllink}>+</a>
-                        </p>
-                    </div>
-                    <a href="#" className="cursor-react">
-                        <div css={styled.imgbox} className="imgbox"></div>
-                    </a>
-                </div>
-                <div css={[styled.contenthome , sectionlinkhome]} className="section-biography-home section-link-home item-fadein is-visible is-animate-done">
-                    <div className="box-headline">
-                        <h3 css={[flight, headline, styled.headlineh3]} className="headline f-light">Title</h3>
-                        <p css={styled.headlinetext}>SubTitle</p>
-                        <p css={[showsml, flight]} className="icon-link f-light show-sml">
-                            <a href="#" css={styled.showsmllink}>+</a>
-                        </p>
-                    </div>
-                    <a href="#" className="cursor-react">
-                        <div css={styled.imgbox} className="imgbox"></div>
-                    </a>
-                </div>
+            <div css={styled.linkhome} id="linkhomesection01">
+                {
+                    item01.map((d, index) => {
+                        const n = d.node;
+                        return (
+                            <div key={index} css={[styled.contenthome , sectionlinkhome]} className="section-contents-home section-link-home item-fadein is-visible is-animate-done content content-imgbox">
+                                <div css={styled.headline} className="box-headline">
+                                    <h3 css={styled.headlineh3} className="headline f-light">{n.title}</h3>
+                                    <p css={styled.headlinetext}>{n.postExcerpt}</p>
+                                    <p css={styled.headlinetext}>{n.createdAt}</p>
+                                </div>
+                                <a href={link(n.id)} className="cursor-react">
+                                    <div css={styled.imgbox} className="imgbox cursor-react-imgbox top">
+                                        <img css={styled.imgitem} src={n.thumbnail[0].fixed.src} alt=""/>
+                                    </div>
+                                </a>
+                            </div>
+                        )
+                    })
+                }
             </div>
-            <div css={styled.linkhome}>
-                <div css={[styled.contenthome , sectionlinkhome]} className="section-contents-home section-link-home item-fadein is-visible is-animate-done">
-                    <div className="box-headline">
-                        <h3 css={[flight, headline, styled.headlineh3]} className="headline f-light">Title</h3>
-                        <p css={styled.headlinetext}>SubTitle</p>
-                        <p css={[showsml ,flight]} className="icon-link f-light show-sml">
-                            <a href="#" css={styled.showsmllink}>+</a>
-                        </p>
-                    </div>
-                    <a href="#" className="cursor-react">
-                        <div css={styled.imgbox} className="imgbox"></div>
-                    </a>
-                </div>
-                <div css={[styled.contenthome , sectionlinkhome]} className="section-biography-home section-link-home item-fadein is-visible is-animate-done">
-                    <div className="box-headline">
-                        <h3 css={[flight, headline, styled.headlineh3]} className="headline f-light">Title</h3>
-                        <p css={styled.headlinetext}>SubTitle</p>
-                        <p css={[showsml ,flight]} className="icon-link f-light show-sml">
-                            <a href="#" css={styled.showsmllink}>+</a>
-                        </p>
-                    </div>
-                    <a href="#" className="cursor-react">
-                        <div css={styled.imgbox} className="imgbox"></div>
-                    </a>
-                </div>
+            <div css={styled.linkhome} id="linkhomesection02">
+                {
+                    item02.map((x, index) => {
+                        const m = x.node;
+                        return (
+                            <div key={index} css={[styled.contenthome , sectionlinkhome]} className="section-contents-home section-link-home item-fadein is-visible is-animate-done content content-imgbox">
+                                <div css={styled.headline} className="box-headline">
+                                    <h3 css={styled.headlineh3} className="headline f-light">{m.title}</h3>
+                                    <p css={styled.headlinetext}>{m.postExcerpt}</p>
+                                    <p css={styled.headlinetext}>{m.createdAt}</p>
+                                </div>
+                                <a href={link(m.id)} className="cursor-react">
+                                    <div css={styled.imgbox} id="bottom" className="imgbox cursor-react-imgbox bottom">
+                                        <img css={styled.imgitem} src={m.thumbnail[0].fixed.src} alt=""/>
+                                    </div>
+                                </a>
+                            </div>
+                        )
+                    })
+                }
             </div>
         </>
     );
@@ -67,27 +96,37 @@ const styled = {
         transform: unset;
         will-change: unset;
         transition: opacity .6s ease-in-out, transform .6s ease-in-out;
-        margin: 5px;
+        margin: 0px;
+    `,
+    headline: css`
+        position: absolute;
+        z-index: 2;
+        top: 16%;
+        left: calc((100vw - 90vw) / 2);
     `,
     headlineh3: css`
         @media screen and (max-width: 800px){
-            font-size: 26px;
+            font-size: 20px;
+            font-weight: 800;
+            color: #fff;
         }
         @media screen and (min-width: 801px){
             display: block;
-            position: absolute;
             z-index: 2;
-            top: 81px;
-            top: 16%;
-            left: calc((100vw - 86vw) / 2);
+            font-size: 25px;
+            font-weight: 800;
+            color: #fff;
+            margin-bottom: 15px;
         }
     `,
     headlinetext: css`
-        position : absolute;
-        top: 35%;
-        left: calc((100vw - 86vw) / 2);
-        display: block;
+        font-weight: 800;
+        color: #fff;
         z-index: 10;
+        margin: 0;
+        @media screen and (max-width: 896px) and (min-width: 481px) {
+            font-size: 15px;
+        }
     `,
     showsmllink: css`
         position: relative;
@@ -104,19 +143,24 @@ const styled = {
     imgbox: css`
         display: block;
         position: relative;
-        padding-top: 57.52%;
-        background-size: cover;
-        background-position: center center;
-        background-repeat: no-repeat;
+        overflow: hidden;
+    `,
+    imgitem: css`
         transform: scale(1);
         transform-origin: center center;
         transition: transform .4s ease-out;
-        background-image: url(http://www.chronicle.city/wp-content/uploads/2019/06/character02B.png);
+        margin-bottom: 0;
+        @media screen and (max-width: 650px) {
+            width: 100%;
+        }
     `,
     linkhome: css`
         display: flex;
         justify-content: center;
         align-items: flex-start;
         flex-wrap: wrap;
+        @media screen and (max-width: 650px) {
+            display: block;
+        }
     `
 }

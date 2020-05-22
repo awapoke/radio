@@ -1,10 +1,7 @@
-import { Link, graphql, useStaticQuery } from 'gatsby';
-import { setLightness } from 'polished';
+import { graphql, useStaticQuery } from 'gatsby';
 import React from 'react';
 import styled from '@emotion/styled';
 import { css } from '@emotion/core';
-// import { IndexQuery } from '../../../types/graphql-types'
-import { colors } from '../../../styles/Colors';
 import { outer, inner } from '../../../styles/Shared';
 
 interface FooterProps {
@@ -38,34 +35,35 @@ export const Footer: React.FC<FooterProps> = () => {
 
     }
   `);
-  console.log("img")
-  console.log("foooter")
-  console.log(data)
+
   return (
     <footer className="fixed-bottom" css={[outer, SiteFooter]}>
       <div className="container" css={[inner, SiteFooterContent]}>
-        <section className="copyright">
-          <Link to="/">あわぽけ</Link>
-          {data.site.siteMetadata.title && (
-            <Link to="/">
-              | ©{data.site.siteMetadata.title}
-            </Link>
+        <SiteFooterSection className="copyright">
+          <a href="/">
+            <img css={footerimg} id="footerLogo" src={data.allCloudinaryMedia.edges[4].node.secure_url} alt="" className="imglogo"/>
+          </a>
+          {data.allCloudinaryMedia.edges[1].node.secure_url && (
+            <a href="/">
+              <img src={data.allCloudinaryMedia.edges[2].node.secure_url} alt="" className="copyright"/>
+            </a>
           )}
-        </section>
-        {/* <SiteFooterNav>
-
-        </SiteFooterNav> */}
+        </SiteFooterSection>
       </div>
     </footer>
   );
 };
+
+const footerimg = css`
+  transition: .8s;
+`;
 
 const SiteFooter = css`
   position: relative;
   padding-top: 20px;
   padding-bottom: 60px;
   color: #fff;
-  background: ${setLightness('0.0015', colors.white)};
+  background: rgb(32,166,242,.6);
 `;
 
 const SiteFooterContent = css`
@@ -87,29 +85,20 @@ const SiteFooterContent = css`
   }
 `;
 
-const SiteFooterNav = styled.nav`
+const SiteFooterSection = styled.section`
+  width: 100%;
+  height: 150px;
   display: flex;
-  a {
-    position: relative;
-    margin-left: 20px;
+  align-items: center;
+  flex-direction: column;
+  justify-content: space-around;
+  img {
+    margin: 0;
   }
-  a:before {
-    content: '';
-    position: absolute;
-    top: 11px;
-    left: -11px;
-    display: block;
-    width: 2px;
-    height: 2px;
-    background: #fff;
-    border-radius: 100%;
+  img.imglogo {
+    width: 130px ;
   }
-  a:first-of-type:before {
-    display: none;
-  }
-  @media (max-width: 650px) {
-    a:first-of-type {
-      margin-left: 0;
-    }
+  img.copyright {
+    width: 450px;
   }
 `;

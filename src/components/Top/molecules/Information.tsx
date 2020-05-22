@@ -1,81 +1,103 @@
-import React, {useState} from 'react'
+import React, {useState, useEffect} from 'react'
 import { css } from '@emotion/core'
 import { flight } from '../../../styles/Shared'
 import { useStaticQuery, graphql } from 'gatsby'
 import Img from "gatsby-image"
 
-const onhandle = (event) =>{
-    console.log(event.target.name)
+interface Layoutprops {
+    readonly children?: React.ReactNode | readonly React.ReactNode[]
 }
 
-export const Information = () => {
-    const [mouse, setMouse] = useState("")
+export const Information = ({ children }: Layoutprops) => {
+    const [protocols, setProtocol] = useState("")
+    const [hostnames, setHostname] = useState("")
+    useEffect(() => {
+        setProtocol(location.protocol)
+        setHostname(location.hostname)
+    }, [])
+
+    const link = (d) => {
+        var protocol = protocols;
+        var host = hostnames;
+        if(host === "localhost"){
+            host = "localhost:8000";
+        }
+        return `${protocol}//${host}/posts/${d}`;
+    }
+
     const data = useStaticQuery(graphql`
         query {
             LogoImage: file(relativePath: { eq: "Logo.png" }) {
                     childImageSharp {
-                        fixed(width: 250) {
+                        fixed(width: 230) {
                             ...GatsbyImageSharpFixed
+                    }
+                }
+            }
+            allContentfulInformation {
+                edges {
+                    node {
+                        id
+                        createdAt(formatString: "YYYY.MM.DD")
+                        postExcerpt
+                        type
                     }
                 }
             }
         }
     `)
 
+    if (children.length > 0 && children !== ""){
+        var item = children.slice( 0, 7 );
+    } else {
+        var item = data.allContentfulInformation.edges.slice( 0, 7 );
+    }
+
     return (
-        <ul css={styled.informationohome} className="information-list information-home l-right">
-            <li css={styled.li}>
-                <a css={styled.cursor} href="#" className="cursor-react" id="informationlink" onMouseOver={(event) => {setMouse(onhandle(event))}}>
-                    <div css={styled.imgbox} className="imgbox">
-                        <Img fixed={data.LogoImage.childImageSharp.fixed} />
-                    </div>
-                    <div css={styled.metabox} className="metabox">
-                        <div className="blink">
-                            <p css={[ styled.metainfo, flight ]} className="metainfo f-light">2019.09.04 - Media</p>
-                            <p css={styled.metainfo} className="ttl">【WEB掲載】デビュー曲「宇宙」の制作とCHRONICLEが目指す表現の追求【インタビュー】</p>
-                        </div>
-                    </div>
-                </a>
-            </li>
-            <li css={styled.li}>
-                <a href="#" css={styled.cursor} className="cursor-react">
-                    <div css={styled.imgbox} className="imgbox">
-                        <Img fixed={data.LogoImage.childImageSharp.fixed} />
-                    </div>
-                    <div css={styled.metabox} className="metabox">
-                        <div className="blink">
-                            <p css={[ styled.metainfo, flight ]} className="metainfo f-light">2019.09.04 - Radio</p>
-                            <p css={styled.metainfo} className="ttl">【WEB掲載】デビュー曲「宇宙」の制作とCHRONICLEが目指す表現の追求【インタビュー】</p>
-                        </div>
-                    </div>
-                </a>
-            </li>
-            <li css={styled.li}>
-                <a href="#" css={styled.cursor} className="cursor-react">
-                    <div css={styled.imgbox} className="imgbox">
-                        <Img fixed={data.LogoImage.childImageSharp.fixed} />
-                    </div>
-                    <div css={styled.metabox} className="metabox">
-                        <div className="blink">
-                            <p css={[ styled.metainfo, flight ]} className="metainfo f-light">2019.09.04 - Blog</p>
-                            <p css={styled.metainfo} className="ttl">【WEB掲載】デビュー曲「宇宙」の制作とCHRONICLEが目指す表現の追求【インタビュー】</p>
-                        </div>
-                    </div>
-                </a>
-            </li>
+        <ul css={style.informationohome} className="information-list information-home l-right">
+            {
+                item.map((d, index) => {
+                    if (d.node){
+                        var n = d.node;
+                    } else {
+                        var n = d;
+                    }
+                    return (
+                        <li key={index} className="feedInfo" css={style.li}>
+                            <a css={style.cursor} href={link(n.id)} className="cursor-react" id="informationlink">
+                                <div css={style.imgbox} className="imgbox">
+                                    <Img fixed={data.LogoImage.childImageSharp.fixed} />
+                                </div>
+                                <div css={style.metabox} className="metabox">
+                                    <div className="blink">
+                                        <p css={[ style.metainfo, flight ]} className="metainfo f-light">{n.createdAt} - {n.type}</p>
+                                        <p css={style.metainfo} className="ttl">{n.postExcerpt}</p>
+                                    </div>
+                                </div>
+                            </a>
+                        </li>
+                    )
+                })
+            }
         </ul>
     )
 }
 
-const styled = {
+const style = {
     informationohome: css`
-        @media screen and (max-width: 800px){
+        @media screen and (max-width: 480px){
             float: none;
             width: 100%;
+            margin-left: 0;
+        }
+        @media screen and (max-width: 896px) and (min-width: 481px){
+            float: none;
+            width: 100%;
+            margin: 0 20px;
         }
         @media screen and (max-width: 1100px) and (min-width: 801px){
             float: none;
-            width: 100%;
+            width: 95%;
         }
         @media screen and (min-width: 1101px){
             float: left;
@@ -89,6 +111,7 @@ const styled = {
         display: flex;
         justify-content: flex-start;
         align-items: stretch;
+        height: 160px;
     ` ,
     imgbox: css`
         display: flex;
@@ -97,6 +120,9 @@ const styled = {
         flex: 0 0 284px;
         overflow: hidden;
         background-color : #cccccc;
+        @media screen and (max-width: 480px){
+            display: none;
+        }
     `,
     corsorimg: css`
         transform: scale(1);
@@ -106,13 +132,20 @@ const styled = {
     metabox: css`
         width: 100%;
         padding: 23px 40px 20px;
-        background-color: #232323;
+        background-color: rgb(32,166,242,.5);
         position: relative;
+        @media screen and (max-width: 480px) {
+            text-decoration: none;
+            background: rgb(32,166,242,.5);
+            color: #FFF;
+            border-bottom: solid 4px #627295;
+            border-radius: 3px;
+        }
     `,
     metainfo: css`
         position: relative;
         z-index: 9;
-        color : #fff;
+        color : #222;
         fint-size: 16px;
     `
 }

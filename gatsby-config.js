@@ -29,7 +29,7 @@ module.exports = {
         background_color: `#663399`,
         theme_color: `#663399`,
         display: `minimal-ui`,
-        icon: `src/images/gatsby-icon.png`,
+        icon: `src/images/logoImg.png`,
       },
     },
     `gatsby-plugin-typescript`,
@@ -57,5 +57,11 @@ module.exports = {
         prefix: 'gatsby-source-cloudinary/',
       },
     },
+    {
+      resolve: `gatsby-source-instagram`,
+      options: {
+        username: `awamori_in_the_pocket`,
+      },
+    }
   ],
 }
