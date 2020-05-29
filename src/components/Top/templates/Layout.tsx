@@ -57,7 +57,7 @@ export const Layout = ({ children }: Layoutprops) => {
             },
           ]}
         >
-           <script src="../../../styles/Cursor.js" type="text/javascript" />
+          <script src="../../../styles/Cursor.js" type="text/javascript" />
         </Helmet>
         <Header title={data.site.siteMetadata.title} />
         <div css={style.wrapper}>
